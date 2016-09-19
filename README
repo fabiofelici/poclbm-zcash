@@ -1,4 +1,19 @@
-Usage: poclbm.py [OPTION]... SERVER[#tag]...
+Requirements
+============
+
+* OpenCL drivers must be installed on computer.
+* OpenCL for Intel CPU / Linux: https://software.intel.com/en-us/articles/opencl-drivers
+* Download python dependencies: sudo pip install -r requirements.txt
+
+Authors
+=======
+2010-2013 Momchil Georgiev <phistov@gmail.com> (original Bitcoin miner)
+2016-*    Marek Palatinus <slush@satoshilabs.com>, Jan Capek <jan.capek@slushpool.com> (Zcash miner)
+
+Usage
+=====
+
+Usage: poclbm-zcash.py [OPTION]... SERVER[#tag]...
 SERVER is one or more [http[s]|stratum://]user:pass@host:port          (required)
 [#tag] is a per SERVER user friendly name displayed in stats (optional)
 

@@ -1,0 +1,4 @@
+pyudev>=0.16
+pyserial>=2.6
+numpy
+pyopencl
