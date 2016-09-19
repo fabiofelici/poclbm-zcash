@@ -264,18 +264,7 @@ class Switch(object):
 	def server_source(self):
 		if not hasattr(self.server(), 'source'):
 			if self.server().proto == 'http':
-				import GetworkSource
-				getwork_source = GetworkSource.GetworkSource(self)
-				say_line('checking for stratum...')
-
-				stratum_host = getwork_source.detect_stratum()
-				if stratum_host:
-					getwork_source.close_connection()
-					self.server().proto = 'stratum'
-					self.server().host = stratum_host
-					self.add_stratum_source()
-				else:
-					self.server().source = getwork_source
+				raise Exception("Getwork protocol is not supported. Use Stratum protocol instead")
 			else:
 				self.add_stratum_source()
 
