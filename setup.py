@@ -8,9 +8,9 @@ use_setuptools()
 
 
 try:
-	import py2exe
+    import py2exe
 except ImportError:
-	py2exe = None
+    py2exe = None
 
 
 args = {
@@ -25,22 +25,22 @@ args = {
 }
 
 if LINUX:
-	args['install_requires'].append('pyudev>=0.16')
+    args['install_requires'].append('pyudev>=0.16')
 
 if py2exe:
-	args.update({
-		# py2exe options
-		'options': {'py2exe':
-						{'optimize': 2,
-						'bundle_files': 2,
-						'compressed': True,
-						'dll_excludes': ['OpenCL.dll', 'w9xpopen.exe', 'boost_python-vc90-mt-1_39.dll'],
-						'excludes': ["Tkconstants", "Tkinter", "tcl", "curses", "_ssl", "pyexpat", "unicodedata", "bz2"],
-						},
-					},
-		'console': ['poclbm.py'],
-		'data_files': ['phatk.cl'],
-		'zipfile': None,
-	})
+    args.update({
+        # py2exe options
+        'options': {'py2exe':
+                        {'optimize': 2,
+                        'bundle_files': 2,
+                        'compressed': True,
+                        'dll_excludes': ['OpenCL.dll', 'w9xpopen.exe', 'boost_python-vc90-mt-1_39.dll'],
+                        'excludes': ["Tkconstants", "Tkinter", "tcl", "curses", "_ssl", "pyexpat", "unicodedata", "bz2"],
+                        },
+                    },
+        'console': ['poclbm.py'],
+        'data_files': ['phatk.cl'],
+        'zipfile': None,
+    })
 
 setup(**args)

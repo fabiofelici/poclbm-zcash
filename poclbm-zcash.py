@@ -10,15 +10,15 @@ import socket
 
 
 class LongPollingSocket(socket.socket):
-	"""
-	Socket wrapper to enable socket.TCP_NODELAY and KEEPALIVE
-	"""
-	def __init__(self, family=socket.AF_INET, type=socket.SOCK_STREAM, proto=0):
-		super(LongPollingSocket, self).__init__(family, type, proto)
-		if type == socket.SOCK_STREAM:
-			self.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-			self.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-		self.settimeout(5)
+    """
+    Socket wrapper to enable socket.TCP_NODELAY and KEEPALIVE
+    """
+    def __init__(self, family=socket.AF_INET, type=socket.SOCK_STREAM, proto=0):
+        super(LongPollingSocket, self).__init__(family, type, proto)
+        if type == socket.SOCK_STREAM:
+            self.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            self.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        self.settimeout(5)
 
 socket.socket = LongPollingSocket
 
@@ -43,10 +43,10 @@ group.add_option('--no-server-failbacks', dest='nsf',        action='store_true'
 parser.add_option_group(group)
 
 group = OptionGroup(parser,
-	"OpenCL Options",
-	"Every option except 'platform' and 'vectors' can be specified as a comma separated list. "
-	"If there aren't enough entries specified, the last available is used. "
-	"Use --vv to specify per-device vectors usage."
+    "OpenCL Options",
+    "Every option except 'platform' and 'vectors' can be specified as a comma separated list. "
+    "If there aren't enough entries specified, the last available is used. "
+    "Use --vv to specify per-device vectors usage."
 )
 group.add_option('-p', '--platform', dest='platform',   default=-1,          help='use platform by id', type='int')
 group.add_option('-w', '--worksize', dest='worksize',   default=[],          help='work group size, default is maximum returned by OpenCL')
@@ -74,28 +74,28 @@ options.cutoff_interval = tokenize(options.cutoff_interval, 'cutoff_interval', [
 
 switch = None
 try:
-	switch = Switch(options)
+    switch = Switch(options)
 
-	if not options.no_ocl:
-		import OpenCLMiner
-		for miner in OpenCLMiner.initialize(options):
-			switch.add_miner(miner)
+    if not options.no_ocl:
+        import OpenCLMiner
+        for miner in OpenCLMiner.initialize(options):
+            switch.add_miner(miner)
 
-	if not switch.servers:
-		print '\nAt least one server is required\n'
-	elif not switch.miners:
-		print '\nNothing to mine on, exiting\n'
-	else:
-		for miner in switch.miners:
-			miner.start()
-		switch.loop()
+    if not switch.servers:
+        print '\nAt least one server is required\n'
+    elif not switch.miners:
+        print '\nNothing to mine on, exiting\n'
+    else:
+        for miner in switch.miners:
+            miner.start()
+        switch.loop()
 except KeyboardInterrupt:
-	print '\nbye'
+    print '\nbye'
 finally:
-	for miner in switch.miners:
-		miner.stop()
-	if switch: switch.stop()
+    for miner in switch.miners:
+        miner.stop()
+    if switch: switch.stop()
 
-	if not options.no_ocl:
-		OpenCLMiner.shutdown()
+    if not options.no_ocl:
+        OpenCLMiner.shutdown()
 sleep(1.1)
