@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 from Switch import Switch
 from optparse import OptionGroup, OptionParser
@@ -82,15 +83,15 @@ try:
             switch.add_miner(miner)
 
     if not switch.servers:
-        print '\nAt least one server is required\n'
+        print('\nAt least one server is required\n')
     elif not switch.miners:
-        print '\nNothing to mine on, exiting\n'
+        print('\nNothing to mine on, exiting\n')
     else:
         for miner in switch.miners:
             miner.start()
         switch.loop()
 except KeyboardInterrupt:
-    print '\nbye'
+    print('\nbye')
 finally:
     for miner in switch.miners:
         miner.stop()

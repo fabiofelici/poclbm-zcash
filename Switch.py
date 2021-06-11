@@ -64,7 +64,7 @@ class Switch(object):
                 s.pwd = ''
                 s.host = temp[0]
             else:
-                if temp[0].find(':') <> -1:
+                if temp[0].find(':') != -1:
                     s.user, s.pwd = temp[0].split(':')
                 else:
                     s.user = temp[0]
@@ -183,22 +183,22 @@ class Switch(object):
         for nonce in result.miner.nonce_generator(result.nonces):
             h = hash(result.state, result.merkle_end, result.time, result.difficulty, nonce)
             if h[7] != 0:
-                hash6 = pack('<I', long(h[6])).encode('hex')
+                hash6 = pack('<I', int(h[6])).encode('hex')
                 say_line('Verification failed, check hardware! (%s, %s)', (result.miner.id(), hash6))
                 return True  # consume this particular result
             else:
                 self.diff1_found(bytereverse(h[6]), result.target[6])
                 if belowOrEquals(h[:7], result.target[:7]):
                     is_block = belowOrEquals(h[:7], self.true_target[:7])
-                    hash6 = pack('<I', long(h[6])).encode('hex')
-                    hash5 = pack('<I', long(h[5])).encode('hex')
+                    hash6 = pack('<I', int(h[6])).encode('hex')
+                    hash5 = pack('<I', int(h[5])).encode('hex')
                     self.sent[nonce] = (is_block, hash6, hash5)
                     if not send_callback(result, nonce):
                         return False
         return True
 
     def diff1_found(self, hash_, target):
-        if self.options.verbose and target < 0xFFFF0000L:
+        if self.options.verbose and target < 0xFFFF0000:
             say_line('checking %s <= %s', (hash_, target))
 
     def status_updated(self, miner):
@@ -248,7 +248,7 @@ class Switch(object):
         with self.lock:
             if not miner:
                 miner = self.miners[0]
-                for i in xrange(1, len(self.miners)):
+                for i in range(1, len(self.miners)):
                     self.miners[i].update = True
             miner.work_queue.put(work)
             if work:

@@ -147,7 +147,7 @@ class StratumSource(Source):
         return j
 
     def increment_nonce(self, nonce):
-        next_nonce = long(nonce, 16) + 1
+        next_nonce = int(nonce, 16) + 1
         if len('%x' % next_nonce) > (self.extranonce2_size * 2):
             return '00' * self.extranonce2_size
         return ('%0' + str(self.extranonce2_size * 2) + 'x') % next_nonce
@@ -228,7 +228,7 @@ class StratumSource(Source):
                 del self.submits[message['id']]
                 if time() - self.last_submits_cleanup > 3600:
                     now = time()
-                    for key, value in self.submits.items():
+                    for key, value in list(self.submits.items()):
                         if now - value[2] > 3600:
                             del self.submits[key]
                     self.last_submits_cleanup = now
@@ -247,14 +247,14 @@ class StratumSource(Source):
 
     def subscribe(self):
         self.send_message({'id': 's', 'method': 'mining.subscribe', 'params': []})
-        for i in xrange(10):
+        for i in range(10):
             sleep(1)
             if self.subscribed: break
         return self.subscribed
 
     def authorize(self):
         self.send_message({'id': self.server().user, 'method': 'mining.authorize', 'params': [self.server().user, self.server().pwd]})
-        for i in xrange(10):
+        for i in range(10):
             sleep(1)
             if self.authorized != None: break
         return self.authorized
@@ -264,11 +264,11 @@ class StratumSource(Source):
         if not job_id in self.jobs:
             return True
         extranonce2 = result.extranonce2
-        ntime = pack('<I', long(result.time)).encode('hex')
-        hex_nonce = pack('<I', long(nonce)).encode('hex')
+        ntime = pack('<I', int(result.time)).encode('hex')
+        hex_nonce = pack('<I', int(nonce)).encode('hex')
         id_ = job_id + hex_nonce
         self.submits[id_] = (result.miner, nonce, time())
-        return self.send_message({'params': [self.server().user, job_id, extranonce2, ntime, hex_nonce], 'id': id_, 'method': u'mining.submit'})
+        return self.send_message({'params': [self.server().user, job_id, extranonce2, ntime, hex_nonce], 'id': id_, 'method': 'mining.submit'})
 
     def send_message(self, message):
         data = dumps(message) + '\n'
@@ -281,7 +281,7 @@ class StratumSource(Source):
             if not self.handler:
                 return False
             while data:
-                sent = self.handler.send(data)
+                sent = self.handler.send(str.encode(data))
                 data = data[sent:]
             return True
         except AttributeError:
